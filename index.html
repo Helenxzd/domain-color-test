@@ -18,7 +18,6 @@
             <tr>
                 <th>Source</th>
                 <th width="150">Hovered color</th>
-                <th width="150">Selected color</th>
             </tr>
         </thead>
         <tbody>
@@ -27,30 +26,30 @@
                     <canvas id="canvas" width="300" height="277"></canvas>
                 </td>
                 <td align="center" class="color-cell" id="hovered-color"></td>
-                <td align="center" class="color-cell" id="selected-color">
-                    <tbody>
-                        <tr>
-                            <td id="1"></td>
-                            <td id="2"></td>
-                            <td id="3"></td>
-                            <td id="4"></td>
-                        </tr>
-                        <tr>
-                            <td id="5"></td>
-                            <td id="6"></td>
-                            <td id="7"></td>
-                            <td id="8"></td>
-                        </tr>
-                        <tr>
-                            <td id="9"></td>
-                            <td id="10"></td>
-                            <td id="11"></td>
-                            <td id="12"></td>
-                        </tr>
-                    <tbody>
                 </td>
             </tr>
         </tbody>
+        <tbody>
+                <tr>
+                    <td id="1" width="300" height="300"></td>
+                    <td id="2"></td>
+                    <td id="3"></td>
+                    <td id="4"></td>
+                </tr>
+                <tr>
+                    <td id="5"></td>
+                    <td id="6"></td>
+                    <td id="7"></td>
+                    <td id="8"></td>
+                </tr>
+                <tr>
+                    <td id="9"></td>
+                    <td id="10"></td>
+                    <td id="11"></td>
+                    <td id="12"></td>
+                </tr>
+        <tbody>
+
     <table>
     <script>
         var img = document.getElementById("img")
@@ -73,7 +72,7 @@
 
             const rgba = `rgba(${data[0]}, ${data[1]}, ${data[2]}, ${data[3] / 255})`;
             destination.style.background = rgba;
-            destination.textContent = rgba;
+            destination.textContent = rgba + ` location: ${x}, ${y}`;
 
             return rgba;
         }
