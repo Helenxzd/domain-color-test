@@ -1,92 +1,67 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Domain Color Test</title>
-	<link rel="stylesheet" type="text/css" href="index.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-</head>
+  <head>
+    <meta charset="utf-8">
+    <title>Color picker | Canvas pixel manipulation</title>
 
-<body>
-	<div class="huabu" >
-        <input type="file" id="file_input" />
-        <canvas id="canvasA" width="600" height="600"></canvas>
-        <div class="anniu" >upload</div>
-    </div>
-    <div class="data">
-        <div id="col"></div>
-        <ul>
-            <li>RGB:(0,0,0)</li>
-            <li>#000000</li>
-            <li>location:</li>
-        </ul>
-    </div>
-
- <script>
-    
-    $(function () {
-
-        //初始化canvas
-        var canvasA = $('#canvasA')[0];
-        var cxtA = canvasA.getContext('2d');
-
-        var img = new Image();//定义图像对象
-        var pxData=null;
-        var $lis=$("li");
-
-        //读取文件
-        $("input[type='file']").change(function(){
-            var file = this.files[0];
-            if (window.FileReader) {
-                var reader = new FileReader();
-                reader.readAsDataURL(file);
-                //监听文件读取结束后事件
-                reader.onloadend = function (e) {
-                    // $(".file_img").attr("src",e.target.result);    //e.target.result就是最后的路径地址
-                    img.src = e.target.result;
-                };
+        <style>
+            .color-cell {
+                color: white;
             }
-        });
-        //图片读取完毕后，写到canvas里面
-        img.onload = function(){
-            if(img.width>600||img.height>600){
-                $("#canvasA").attr("width",img.width/2);
-                $("#canvasA").attr("height",img.height/2);
-            }else if(img.width<300&&img.height<300){
-                $("#canvasA").attr("width",img.width*2);
-                $("#canvasA").attr("height",img.height*2);
-            }else {
-                $("#canvasA").attr("width",600);
-                $("#canvasA").attr("height",600);
-            }
-            cxtA.drawImage(img, 0, 0, canvasA.width, canvasA.height);
-            var imgDataA = cxtA.getImageData(0, 0, canvasA.width, canvasA.height);
-            pxData = imgDataA.data;  //获取每一个像素
+        </style>
+  </head>
+  <body>
+    <img id="img" src="boccioni.png" style="display: none"></img>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Source</th>
+                <th width="150">Hovered color</th>
+                <th width="150">Selected color</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <canvas id="canvas" width="300" height="277"></canvas>
+                </td>
+                <td align="center" class="color-cell" id="hovered-color"></td>
+                <td align="center" class="color-cell" id="selected-color"></td>
+            </tr>
+        </tbody>
+    <table>
+    <script>
+        var img = document.getElementById("img")
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        img.onload = function() {
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          img.style.display = 'none';
+        };
+        var hoveredColor = document.getElementById('hovered-color');
+        var selectedColor = document.getElementById('selected-color');
+
+
+        function pick(event, destination) {
+          var x = event.layerX;
+          var y = event.layerY;
+          var pixel = ctx.getImageData(x, y, 1, 1);
+          var data = pixel.data;
+
+            const rgba = `rgba(${data[0]}, ${data[1]}, ${data[2]}, ${data[3] / 255})`;
+            destination.style.background = rgba;
+            destination.textContent = rgba;
+
+            return rgba;
         }
-        //获得鼠标相对于画布的坐标点
-        $("#canvasA").on("click",function (e) {
-            //获取鼠标位置
-            var positionX=e.pageX - $(this).offset().left - parseFloat($(this).css('border-left-width'));
-            var positionY=e.pageY - $(this).offset().top - parseFloat($(this).css('border-top-width'));
-            //当前位置对应的成员
-            var imgdata= positionY*canvasA.width+positionX;
-            //获得rgb值
-            var r = pxData[4*imgdata+0];
-            var g = pxData[4*imgdata+1];
-            var b = pxData[4*imgdata+2];
-            var grey = 0.3*r + 0.59*g + 0.11*b;//灰度公式
-            $("#col").css("backgroundColor","rgba("+r+","+g+","+b+")");
-            // $("#col").css("backgroundColor","rgba("+r+","+g+","+b+","+grey+")");
-            $lis.eq(0).text("RGB:("+r+","+g+","+b+")");
-            $lis.eq(1).text("#"+r.toString(16)+g.toString(16)+b.toString(16));
-            $lis.eq(2).text("location:("+positionX+","+positionY+")");
 
+        canvas.addEventListener('mousemove', function(event) {
+            pick(event, hoveredColor);
         });
-        $(".anniu").on("click" , function () {
-            $("#file_input").click();
+        canvas.addEventListener('click', function(event) {
+            pick(event, selectedColor);
         });
-    });
-
-</script>
-</body>
-
+    </script>
+  </body>
 </html>
