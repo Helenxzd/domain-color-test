@@ -27,7 +27,28 @@
                     <canvas id="canvas" width="300" height="277"></canvas>
                 </td>
                 <td align="center" class="color-cell" id="hovered-color"></td>
-                <td align="center" class="color-cell" id="selected-color"></td>
+                <td align="center" class="color-cell" id="selected-color">
+                    <tbody>
+                        <tr>
+                            <td id="1"></td>
+                            <td id="2"></td>
+                            <td id="3"></td>
+                            <td id="4"></td>
+                        </tr>
+                        <tr>
+                            <td id="5"></td>
+                            <td id="6"></td>
+                            <td id="7"></td>
+                            <td id="8"></td>
+                        </tr>
+                        <tr>
+                            <td id="9"></td>
+                            <td id="10"></td>
+                            <td id="11"></td>
+                            <td id="12"></td>
+                        </tr>
+                    <tbody>
+                </td>
             </tr>
         </tbody>
     <table>
@@ -35,12 +56,13 @@
         var img = document.getElementById("img")
         var canvas = document.getElementById('canvas');
         var ctx = canvas.getContext('2d');
+        var count = 1;
         img.onload = function() {
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
           img.style.display = 'none';
         };
         var hoveredColor = document.getElementById('hovered-color');
-        var selectedColor = document.getElementById('selected-color');
+        // var selectedColor = document.getElementById(count.toString());
 
 
         function pick(event, destination) {
@@ -60,7 +82,9 @@
             pick(event, hoveredColor);
         });
         canvas.addEventListener('click', function(event) {
+            var selectedColor = document.getElementById(count.toString());
             pick(event, selectedColor);
+            count++;
         });
     </script>
   </body>
