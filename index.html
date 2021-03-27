@@ -11,8 +11,8 @@
         </style>
   </head>
   <body>
-    <img id="img" src="boccioni.png" style="display: none"></img>
-
+    <img id="img" src="001.png" style="display: none"></img>
+    <div id="result" style="display: none">imgCount: 1 </div>
     <table>
         <thead>
             <tr>
@@ -53,6 +53,9 @@
                 </tr>
         <tbody>
     <table>
+    <div id="next" style="display:none">
+        <button onclick="next()">NextImage</button>
+    </div>
     <script>
         var img = document.getElementById("img")
         var canvas = document.getElementById('canvas');
@@ -62,19 +65,63 @@
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
           img.style.display = 'none';
         };
+        img.crossOrigin='Anonymous'
         var hoveredColor = document.getElementById('hovered-color');
-        // var selectedColor = document.getElementById(count.toString());
+
+
+        var imgCount = 2;
+        function next() {
+            var next = document.getElementById("next")
+            next.style.display = "none";
+            var img = document.getElementById("img")
+            var img_str = `${imgCount}`
+            img.src = img_str.padStart(3, '0')+'.png'
+            console.log(img.src)
+            var canvas = document.getElementById('canvas');
+            var ctx = canvas.getContext('2d');
+            var count = 1;
+            img.onload = function() {
+              ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+              img.style.display = 'none';
+            };
+            var hoveredColor = document.getElementById('hovered-color');
+
+            var result = document.getElementById("result");
+            result.innerText += ' imgCount:' + imgCount
+
+            imgCount++;
+
+            if (imgCount == 17) {
+                var text = document.getElementById('result').innerText
+                download("result.txt",text); 
+            }
+        }
+
+        function download(filename, text) {
+              var element = document.createElement('a');
+              element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+              element.setAttribute('download', filename);
+             
+              element.style.display = 'none';
+              document.body.appendChild(element);
+             
+              element.click();
+             
+              document.body.removeChild(element);
+        }
 
 
         function pick(event, destination) {
-          var x = event.layerX;
-          var y = event.layerY;
-          var pixel = ctx.getImageData(x, y, 1, 1);
-          var data = pixel.data;
+            var x = event.layerX;
+            var y = event.layerY;
+            var pixel = ctx.getImageData(x, y, 1, 1);
+            var data = pixel.data;
 
             const rgba = `rgba(${data[0]}, ${data[1]}, ${data[2]}, ${data[3] / 255})`;
             destination.style.background = rgba;
             destination.textContent = rgba + ` location: ${x}, ${y}`;
+            var result = document.getElementById("result");
+            result.innerText += destination.textContent
 
             return rgba;
         }
@@ -86,6 +133,11 @@
             var selectedColor = document.getElementById(count.toString());
             pick(event, selectedColor);
             count++;
+            if (count >= 13) {
+                count = 1;
+                var next = document.getElementById("next")
+                next.style.display = "";
+            }
         });
     </script>
   </body>
