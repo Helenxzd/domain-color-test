@@ -35,21 +35,51 @@
         <tbody>
                 <tr>
                     <td id="1" width="300" height="30"></td>
+                    <td id="t1" width="300" height="30"></td>
+                </tr>
+                <tr>
                     <td id="2" width="300" height="30"></td>
+                    <td id="t2" width="300" height="30"></td>
+                </tr>
+                <tr>
                     <td id="3" width="300" height="30"></td>
+                    <td id="t3" width="300" height="30"></td>
+                </tr>
+                <tr>
                     <td id="4" width="300" height="30"></td>
+                    <td id="t4" width="300" height="30"></td>
                 </tr>
                 <tr>
                     <td id="5" width="300" height="30"></td>
-                    <td id="6"></td>
-                    <td id="7"></td>
-                    <td id="8"></td>
+                    <td id="t5" width="300" height="30"></td>
+                </tr>
+                <tr>
+                    <td id="6" width="300" height="30"></td>
+                    <td id="t6" width="300" height="30"></td>
+                </tr>
+                <tr>
+                    <td id="7" width="300" height="30"></td>
+                    <td id="t7" width="300" height="30"></td>
+                </tr>
+                <tr>
+                    <td id="8" width="300" height="30"></td>
+                    <td id="t8" width="300" height="30"></td>
                 </tr>
                 <tr>
                     <td id="9" width="300" height="30"></td>
-                    <td id="10"></td>
-                    <td id="11"></td>
-                    <td id="12"></td>
+                    <td id="t9" width="300" height="30"></td>
+                </tr>
+                <tr>
+                    <td id="10" width="300" height="30"></td>
+                    <td id="t10" width="300" height="30"></td>
+                </tr>
+                <tr>
+                    <td id="11" width="300" height="30"></td>
+                    <td id="t11" width="300" height="30"></td>
+                </tr>
+                <tr>
+                    <td id="12" width="300" height="30"></td>
+                    <td id="t12" width="300" height="30"></td>
                 </tr>
         <tbody>
     <table>
@@ -110,28 +140,30 @@
         }
 
 
-        function pick(event, destination) {
+        function pick(event, destination1, destination2) {
             var x = event.layerX;
             var y = event.layerY;
             var pixel = ctx.getImageData(x, y, 1, 1);
             var data = pixel.data;
 
             const rgba = `rgba(${data[0]}, ${data[1]}, ${data[2]}, ${data[3] / 255})`;
-            destination.style.background = rgba;
-            destination.textContent = rgba + ` location: ${x}, ${y}`;
+            destination1.style.background = rgba;
+            destination2.textContent = rgba + ` location: ${x}, ${y}`;
             var result = document.getElementById("result");
-            result.innerText += destination.textContent
+            result.innerText += destination2.textContent
 
             return rgba;
         }
 
         canvas.addEventListener('mousemove', function(event) {
-            pick(event, hoveredColor);
+            pick(event, hoveredColor, hoveredColor);
         });
         canvas.addEventListener('click', function(event) {
             if (count < 13) {
-                var selectedColor = document.getElementById(count.toString());
-                pick(event, selectedColor);
+                var selectedColor1 = document.getElementById(count.toString());
+                var selectedColor2 = document.getElementById('t'+count.toString());
+
+                pick(event, selectedColor1, selectedColor2);
                 count++;
             }
             else {
